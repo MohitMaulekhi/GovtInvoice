@@ -5,12 +5,13 @@ const Auth = getAuth(app);
 export default function LogIn(email, password) {
   signInWithEmailAndPassword(Auth, email, password)
     .then((userCredential) => {
-      const user = userCredential.user;
+      const user = userCredential;
       return user;
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      console.log(errorCode, errorMessage)
+      alert(errorMessage)
+      console.log(errorCode,errorMessage )
     });
 }
