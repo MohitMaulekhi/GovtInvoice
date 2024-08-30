@@ -1,46 +1,67 @@
-import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
+
+
 
 export default Invoice1 = () => {
-  const invoiceData = {
-    invoiceNumber: '12345',
-    invoiceDate: '01/01/2022',
-    customerName: 'John Smith',
-    customerEmail: 'john@example.com',
-    customerAddress: '123 Main St, Anytown USA 12345',
+  const [invoiceData, setInvoiceData] = useState({
+    invoiceNumber: '',
+    invoiceDate: '',
+    customerName: '',
+    customerEmail: '',
+    customerAddress: '',
     items: [
-      {
-        id: 1,
-        name: 'Item 1',
-        quantity: 2,
-        price: 9.99,
-        total: 19.98,
-      },
-      {
-        id: 2,
-        name: 'Item 2',
-        quantity: 1,
-        price: 19.99,
-        total: 19.99,
-      },
+      { id: 1, name: '', quantity: '', price: '', total: '' },
+      { id: 2, name: '', quantity: '', price: '', total: '' },
     ],
-    total: 39.97,
+    total: '',
+  });
+
+  const handleOnChange = (name, value, index = null) => {
+    if (index !== null) {
+      // Update a specific item in the items array
+      const updatedItems = [...invoiceData.items];
+      updatedItems[index][name] = value;
+      setInvoiceData({ ...invoiceData, items: updatedItems });
+    } else {
+      // Update other fields in the invoiceData object
+      setInvoiceData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
-  
+  const calculateTotal = () => {
+    const total = invoiceData.items.reduce((sum, item) => {
+      const itemTotal = parseFloat(item.quantity) * parseFloat(item.price);
+      return sum + (isNaN(itemTotal) ? 0 : itemTotal);
+    }, 0);
+    setInvoiceData({ ...invoiceData, total: total.toFixed(2) });
+  };
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>Invoice</Text>
       </View>
       <View style={styles.invoiceInfoContainer}>
         <View style={styles.invoiceInfo}>
           <Text style={styles.label}>Invoice Number:</Text>
-          <Text style={styles.text}>{invoiceData.invoiceNumber}</Text>
+          <TextInput
+            style={styles.input}
+            value={invoiceData.invoiceNumber}
+            onChangeText={(value) => handleOnChange('invoiceNumber', value)}
+            placeholder="Enter Invoice Number"
+          />
         </View>
         <View style={styles.invoiceInfo}>
           <Text style={styles.label}>Invoice Date:</Text>
-          <Text style={styles.text}>{invoiceData.invoiceDate}</Text>
+          <TextInput
+            style={styles.input}
+            value={invoiceData.invoiceDate}
+            onChangeText={(value) => handleOnChange('invoiceDate', value)}
+            placeholder="Enter Invoice Date"
+          />
         </View>
       </View>
       <View style={styles.divider} />
@@ -48,27 +69,60 @@ export default Invoice1 = () => {
         <Text style={styles.subtitle}>Customer Information</Text>
         <View style={styles.customerInfo}>
           <Text style={styles.label}>Name:</Text>
-          <Text style={styles.text}>{invoiceData.customerName}</Text>
+          <TextInput
+            style={styles.input}
+            value={invoiceData.customerName}
+            onChangeText={(value) => handleOnChange('customerName', value)}
+            placeholder="Enter Customer Name"
+          />
         </View>
         <View style={styles.customerInfo}>
           <Text style={styles.label}>Email:</Text>
-          <Text style={styles.text}>{invoiceData.customerEmail}</Text>
+          <TextInput
+            style={styles.input}
+            value={invoiceData.customerEmail}
+            onChangeText={(value) => handleOnChange('customerEmail', value)}
+            placeholder="Enter Customer Email"
+            keyboardType="email-address"
+          />
         </View>
         <View style={styles.customerInfo}>
           <Text style={styles.label}>Address:</Text>
-          <Text style={styles.text}>{invoiceData.customerAddress}</Text>
+          <TextInput
+            style={styles.input}
+            value={invoiceData.customerAddress}
+            onChangeText={(value) => handleOnChange('customerAddress', value)}
+            placeholder="Enter Customer Address"
+          />
         </View>
       </View>
       <View style={styles.divider} />
       <View style={styles.itemsContainer}>
         <Text style={styles.subtitle}>Invoice Items</Text>
-        {invoiceData.items.map((item) => (
+        {invoiceData.items.map((item, index) => (
           <View style={styles.item} key={item.id}>
-            <Text style={styles.itemName}>{item.name}</Text>
-            <Text style={styles.itemDetails}>
-              {item.quantity} x ${item.price}
-            </Text>
-            <Text style={styles.itemTotal}>${item.total}</Text>
+            <TextInput
+              style={styles.itemNameInput}
+              value={item.name}
+              onChangeText={(value) => handleOnChange('name', value, index)}
+              placeholder="Item Name"
+            />
+            <TextInput
+              style={styles.itemDetailsInput}
+              value={item.quantity}
+              onChangeText={(value) => handleOnChange('quantity', value, index)}
+              placeholder="Quantity"
+              keyboardType="numeric"
+              onBlur={calculateTotal} // Recalculate total on quantity change
+            />
+            <TextInput
+              style={styles.itemDetailsInput}
+              value={item.price}
+              onChangeText={(value) => handleOnChange('price', value, index)}
+              placeholder="Price"
+              keyboardType="numeric"
+              onBlur={calculateTotal} // Recalculate total on price change
+            />
           </View>
         ))}
       </View>
@@ -77,14 +131,14 @@ export default Invoice1 = () => {
         <Text style={styles.label}>Total:</Text>
         <Text style={styles.total}>${invoiceData.total}</Text>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    height:"100%"
+    marginTop: 20,
   },
   header: {
     alignItems: 'center',
@@ -99,13 +153,19 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   invoiceInfo: {
-    flexDirection: 'row',
+    flex: 1,
+    marginRight: 10,
   },
   label: {
     fontWeight: 'bold',
+    marginBottom: 5,
   },
-  text: {
-    marginLeft: 5,
+  input: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
   divider: {
     borderBottomColor: '#ccc',
@@ -116,8 +176,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   customerInfo: {
-    flexDirection: 'row',
-    marginVertical: 5,
+    marginBottom: 10,
   },
   subtitle: {
     fontSize: 18,
@@ -128,20 +187,29 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   item: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 5,
+    marginBottom: 10,
   },
-  itemName: {
-    fontSize: 16,
+  itemNameInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
   },
-  itemDetails: {},
+  itemDetailsInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+  },
   itemTotal: {
+    marginTop: 10,
     fontWeight: 'bold',
   },
   totalContainer: {
     flexDirection: 'row',
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     marginTop: 20,
   },
   total: {

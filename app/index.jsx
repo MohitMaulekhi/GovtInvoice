@@ -1,4 +1,4 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import visionImage from "../assets/VisionImage2.png"
 import { Button, TextInput } from 'react-native-paper'
 import AuthButton from '../components/auth/AuthButton'
@@ -11,22 +11,16 @@ const index = () => {
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
   const [alreadyUser, setAlreadyUser] = useState(0)
+  const [isNavigationReady, setNavigationReady] = useState(false);
   const navigate = useNavigation()
-  useEffect(() => {
-    const unsubscribe = Auth.onAuthStateChanged(user => {
-      if (user) {
-        router.replace("/");
-        navigate.navigate("main")
+      Auth.onAuthStateChanged((user) => {
+        if(user != null){
+        router.push("/main/home")
       }
-      else{
-        navigate.navigate("/")
       }
-      return () => unsubscribe();
-    },[]);
+      )
 
-    // Cleanup subscription on unmount
-    return () => unsubscribe();
-  });
+
   return (
 
     <View style={styles.authenticationPage}>
