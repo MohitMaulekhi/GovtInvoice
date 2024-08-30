@@ -1,27 +1,32 @@
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import visionImage from "../assets/VisionImage2.png"
 import { Button, TextInput } from 'react-native-paper'
-// import GoogleButton from '../components/auth/GoogleButton.jsx'
 import AuthButton from '../components/auth/AuthButton'
 import { SignUp, LogIn } from "../services/index.js"
-import { useState ,useEffect} from "react"
-import { Redirect, router, useNavigation } from 'expo-router'
-import { onAuthStateChanged } from 'firebase/auth'
+import { useState, useEffect } from "react"
+import firebase from 'firebase/compat/app'
+import { router, useNavigation } from 'expo-router'
+import { Auth, app } from '../services/firebaseconfig.js'
 const index = () => {
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
   const [alreadyUser, setAlreadyUser] = useState(0)
-  const navigation = useNavigation();
-  function auth(func,email,password){
-    try{
-      const user = func(email,password)
-      router.replace("/")
-      navigation.navigate("main")
-    }
-    catch{
-      alert("Invalid Email or Password")
-    }
-  }
+  const navigate = useNavigation()
+  useEffect(() => {
+    const unsubscribe = Auth.onAuthStateChanged(user => {
+      if (user) {
+        router.replace("/");
+        navigate.navigate("main")
+      }
+      else{
+        navigate.navigate("/")
+      }
+      return () => unsubscribe();
+    },[]);
+
+    // Cleanup subscription on unmount
+    return () => unsubscribe();
+  });
   return (
 
     <View style={styles.authenticationPage}>
@@ -44,9 +49,9 @@ const index = () => {
           value={Password}
           onChangeText={text => setPassword(text)}
           secureTextEntry={true} />
-        {alreadyUser ? <AuthButton type={"Sign Up"} func={() => auth(SignUp,Email, Password)} /> : <AuthButton type={"Log In"} func={() => auth(LogIn,Email, Password)} />}
-        {alreadyUser ? <View><Text>Don't have an account</Text><Button onPress = {(temp)=>setAlreadyUser(0)}><Text>Log in</Text></Button></View> :
-          <View><Text>Already have an account</Text><Button onPress = {()=>setAlreadyUser(1)}><Text>Sign Up</Text></Button></View> }
+        {alreadyUser ? <AuthButton type={"Sign Up"} func={() => SignUp(Email, Password)} /> : <AuthButton type={"Log In"} func={() => LogIn(Email, Password)} />}
+        {alreadyUser ? <View><Text>Don't have an account</Text><Button onPress={(temp) => setAlreadyUser(0)}><Text>Log in</Text></Button></View> :
+          <View><Text>Already have an account</Text><Button onPress={() => setAlreadyUser(1)}><Text>Sign Up</Text></Button></View>}
       </View>
 
     </View>

@@ -84,7 +84,7 @@ export default Invoice1 = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    marginTop:80,
+    height:"100%"
   },
   header: {
     alignItems: 'center',

@@ -1,11 +1,10 @@
-import { app } from "./firebaseconfig.js"
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { Auth } from "./firebaseconfig";
 
-const Auth = getAuth(app);
 export default function LogIn(email, password) {
   signInWithEmailAndPassword(Auth, email, password)
     .then((userCredential) => {
-      const user = userCredential;
+      const user = userCredential.user;
       return user;
     })
     .catch((error) => {
