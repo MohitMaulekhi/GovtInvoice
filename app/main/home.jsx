@@ -5,12 +5,7 @@ import {useState} from "react"
 
 const styles = StyleSheet.create({
   container: {
-    height:"100%"
-  },
-  FloatingAction: {
-    position:"absolute",
-    bottom:5,
-    right:10
+    height:"100%",
   }
 })
 
@@ -48,7 +43,6 @@ const home = () => {
     <View styles = {styles.container}>
       {typeParser()}
        <FloatingAction
-        styles = {styles.FloatingAction}
         actions={actions}
         onPressItem={type => {
          setType(type);
