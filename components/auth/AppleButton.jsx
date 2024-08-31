@@ -4,12 +4,12 @@ import Icon from "react-native-vector-icons/FontAwesome";
 
 const AppleButton = () => {
   const handlePress = () => {
-    // Add your sign-up logic here
+    // Add sign-up logic here
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.googleButton} onPress={handlePress}>
+      <TouchableOpacity style={styles.appleButton} onPress={handlePress}>
         <Icon name="apple" size={20} color="#FFF" style={styles.icon} />
         <Text style={styles.buttonText}>Sign Up with Apple</Text>
       </TouchableOpacity>
@@ -18,22 +18,20 @@ const AppleButton = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
-  googleButton: {
+  appleButton: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fafafa",
+    justifyContent: "center",
+    backgroundColor: "#000000",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 10,
+    marginTop: 10,
+    borderRadius: 20,
+    width: 250
   },
   icon: {
-    marginRight: 10,
+    marginRight: 15,
   },
   buttonText: {
     color: "#FFF",

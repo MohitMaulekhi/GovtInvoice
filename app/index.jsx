@@ -1,5 +1,6 @@
 import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import visionImage from "../assets/VisionImage2.png"
+import userIcon from "../assets/profile.png"
 import { Button, TextInput } from 'react-native-paper'
 import AuthButton from '../components/auth/AuthButton'
 import { SignUp, LogIn } from "../services/index.js"
@@ -34,8 +35,14 @@ const index = () => {
       />
 
       <View style={styles.containerMain}>
-        <View style={styles.ellipse}></View>
-        <Text style={styles.letsConnectWith}>Let’s Connect With Us!</Text>
+        <View style={styles.ellipse}>
+          <Image
+            style={styles.userIcon}
+            resizeMode="cover"
+            source={userIcon}
+          />
+        </View>
+        <Text style={styles.letsConnectWith}>Let's Connect With Us!</Text>
         <TextInput
           style={styles.input}
           mode="outlined"
@@ -65,7 +72,7 @@ const index = () => {
           </View>
         ) : (
           <View>
-            <Text>Already have an account</Text>
+            <Text style={{justifyContent: "center"}}>Already have an account</Text>
             <Button onPress={() => setAlreadyUser(1)}>
               <Text>Sign Up</Text>
             </Button>
@@ -96,7 +103,8 @@ const styles = StyleSheet.create({
   },
   visionImage2Icon: {
     width: "100%",
-    height: "25%",
+    height: "35%",
+
   },
   containerMain: {
     flex: 1,
@@ -113,6 +121,10 @@ const styles = StyleSheet.create({
     position: "relative",
     bottom: 50,
     marginBottom: -50,
+  },
+  userIcon: {
+    height: 100,
+    width: 100,
   },
   letsConnectWith: {
     fontSize: 32,
