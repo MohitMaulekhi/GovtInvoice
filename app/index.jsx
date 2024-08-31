@@ -4,21 +4,20 @@ import { Button, TextInput } from 'react-native-paper'
 import AuthButton from '../components/auth/AuthButton'
 import { SignUp, LogIn } from "../services/index.js"
 import { useState, useEffect } from "react"
-import firebase from 'firebase/compat/app'
-import { router, useNavigation } from 'expo-router'
-import { Auth, app } from '../services/firebaseconfig.js'
+import { router } from 'expo-router'
+import { Auth} from '../services/firebaseconfig.js'
 import GoogleButton from "../components/auth/GoogleButton.jsx"
 import AppleButton from "../components/auth/AppleButton.jsx"
 const index = () => {
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
   const [alreadyUser, setAlreadyUser] = useState(0)
-  const [isNavigationReady, setNavigationReady] = useState(false);
-  const navigate = useNavigation()
   useEffect(()=>{
     Auth.onAuthStateChanged((user) => {
       if(user != null){
-      router.push("/main/home")
+        //  router.replace("/")
+      router.replace("/main/home")
+     
     }
     }
     )
