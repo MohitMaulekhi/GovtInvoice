@@ -13,16 +13,12 @@ const index = () => {
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
   const [alreadyUser, setAlreadyUser] = useState(0)
-  useEffect(()=>{
     Auth.onAuthStateChanged((user) => {
-      if(user != null){
-        //  router.replace("/")
+      if(user){
       router.replace("/main/home")
-     
-    }
+     }
     }
     )
-  },[])
       
 
 
@@ -64,22 +60,25 @@ const index = () => {
           <AuthButton type={"Log In"} func={() => LogIn(Email, Password)} />
         )}
         {alreadyUser ? (
-          <View>
+          <View style = {styles.authText}>
             <Text>Don't have an account</Text>
             <Button onPress={(temp) => setAlreadyUser(0)}>
               <Text>Log in</Text>
             </Button>
           </View>
         ) : (
-          <View>
-            <Text style={{justifyContent: "center"}}>Already have an account</Text>
+          <View style = {styles.authText}>
+            <Text>Already have an account</Text>
             <Button onPress={() => setAlreadyUser(1)}>
-              <Text>Sign Up</Text>
+              Sign Up
             </Button>
-            <GoogleButton />
-            <AppleButton />
+            
           </View>
         )}
+        <View style = {{margin:5}}>
+        <GoogleButton />
+        <AppleButton />
+        </View>
       </View>
     </View>
   );
@@ -91,6 +90,9 @@ const styles = StyleSheet.create({
   Text: {
     fontSize: 20,
     color: "#000",
+  },
+  authText:{
+    margin:10
   },
   authenticationPage: {
     borderRadius: 32,

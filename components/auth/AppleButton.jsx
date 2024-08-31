@@ -20,15 +20,10 @@ const AppleButton = () => {
 const styles = StyleSheet.create({
   appleButton: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#000000",
     paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    marginTop: 10,
+    paddingHorizontal: 100,
     borderRadius: 20,
-    width: 250
   },
   icon: {
     marginRight: 15,

@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, StyleSheet, ScrollView} from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { print,printToFile } from '../../services/pdfMaker';
+import { print, printToFile } from '../../services/pdfMaker';
 
 export default Invoice1 = () => {
-  
-  const [preview, setPreview] = useState(1)
+
+  const [preview, setPreview] = useState(0)
   const [invoiceData, setInvoiceData] = useState({
     invoiceNumber: '',
     invoiceDate: '',
@@ -139,12 +139,10 @@ export default Invoice1 = () => {
 </html>`
   const handleOnChange = (name, value, index = null) => {
     if (index !== null) {
-      // Update a specific item in the items array
       const updatedItems = [...invoiceData.items];
       updatedItems[index][name] = value;
       setInvoiceData({ ...invoiceData, items: updatedItems });
     } else {
-      // Update other fields in the invoiceData object
       setInvoiceData((prevData) => ({
         ...prevData,
         [name]: value,
@@ -159,69 +157,68 @@ export default Invoice1 = () => {
     }, 0);
     setInvoiceData({ ...invoiceData, total: total.toFixed(2) });
   };
-  return <SafeAreaView style={{backgroundColor: '#f3f3f5' ,marginBottom:100}}>
+  return <View style={styles.maincontainer}>
     <View style={styles.buttonContainer}>
-      <Button style={styles.topButtons} mode = "contained" onPress={() => print(html)}>
-      Print
+      <Button style={styles.topButtons} mode="contained" onPress={() => print(html)}>
+        Print
       </Button>
-      <Button style={styles.topButtons} mode = "contained" onPress={() => setPreview((old) => !old)}>
-      {preview ? "Form" : "Preview"}
+      <Button style={styles.topButtons} mode="contained" onPress={() => setPreview((old) => !old)}>
+        {preview ? "Form" : "Preview"}
       </Button>
-      <Button style={styles.topButtons} mode = "contained" onPress={() => printToFile(html)}>
-       Share
+      <Button style={styles.topButtons} mode="contained" onPress={() => printToFile(html)}>
+        Share
       </Button>
     </View>
-    {preview ? (
-      <ScrollView style={styles.container}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Invoice</Text>
+    {preview ? <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Invoice</Text>
+      </View>
+      <View style={styles.invoiceInfoContainer}>
+        <View style={styles.invoiceInfo}>
+          <Text style={styles.label}>Invoice Number:</Text>
+          <Text style={styles.text}>{invoiceData.invoiceNumber}</Text>
         </View>
-        <View style={styles.invoiceInfoContainer}>
-          <View style={styles.invoiceInfo}>
-            <Text style={styles.label}>Invoice Number:</Text>
-            <Text style={styles.text}>{invoiceData.invoiceNumber}</Text>
-          </View>
-          <View style={styles.invoiceInfo}>
-            <Text style={styles.label}>Invoice Date:</Text>
-            <Text style={styles.text}>{invoiceData.invoiceDate}</Text>
-          </View>
+        <View style={styles.invoiceInfo}>
+          <Text style={styles.label}>Invoice Date:</Text>
+          <Text style={styles.text}>{invoiceData.invoiceDate}</Text>
         </View>
-        <View style={styles.divider} />
-        <View style={styles.customerInfoContainer}>
-          <Text style={styles.subtitle}>Customer Information</Text>
-          <View style={styles.customerInfo}>
-            <Text style={styles.label}>Name:</Text>
-            <Text style={styles.text}>{invoiceData.customerName}</Text>
-          </View>
-          <View style={styles.customerInfo}>
-            <Text style={styles.label}>Email:</Text>
-            <Text style={styles.text}>{invoiceData.customerEmail}</Text>
-          </View>
-          <View style={styles.customerInfo}>
-            <Text style={styles.label}>Address:</Text>
-            <Text style={styles.text}>{invoiceData.customerAddress}</Text>
-          </View>
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.customerInfoContainer}>
+        <Text style={styles.subtitle}>Customer Information</Text>
+        <View style={styles.customerInfo}>
+          <Text style={styles.label}>Name:</Text>
+          <Text style={styles.text}>{invoiceData.customerName}</Text>
         </View>
-        <View style={styles.divider} />
-        <View style={styles.itemsContainer}>
-          <Text style={styles.subtitle}>Invoice Items</Text>
-          {invoiceData.items.map((item) => (
-            <View style={styles.item} key={item.id}>
-              <Text style={styles.itemName}>{item.name}</Text>
-              <Text style={styles.itemDetails}>
-                {item.quantity} x ${item.price}
-              </Text>
-              <Text style={styles.itemTotal}>${item.total}</Text>
-            </View>
-          ))}
+        <View style={styles.customerInfo}>
+          <Text style={styles.label}>Email:</Text>
+          <Text style={styles.text}>{invoiceData.customerEmail}</Text>
         </View>
-        <View style={styles.divider} />
-        <View style={styles.totalContainer}>
-          <Text style={styles.label}>Total:</Text>
-          <Text style={styles.total}>${invoiceData.total}</Text>
+        <View style={styles.customerInfo}>
+          <Text style={styles.label}>Address:</Text>
+          <Text style={styles.text}>{invoiceData.customerAddress}</Text>
         </View>
-      </ScrollView>
-    ) : (
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.itemsContainer}>
+        <Text style={styles.subtitle}>Invoice Items</Text>
+        {invoiceData.items.map((item) => (
+          <View style={styles.item} key={item.id}>
+            <Text style={styles.itemName}>{item.name}</Text>
+            <Text style={styles.itemDetails}>
+              {item.quantity} x ${item.price}
+            </Text>
+            <Text style={styles.itemTotal}>${item.total}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={styles.divider} />
+      <View style={styles.totalContainer}>
+        <Text style={styles.label}>Total:</Text>
+        <Text style={styles.total}>${invoiceData.total}</Text>
+      </View>
+    </View>
+      :
       <ScrollView style={styles.container}>
         <View style={styles.header}>
           <Text style={styles.title}>Invoice</Text>
@@ -233,7 +230,7 @@ export default Invoice1 = () => {
               style={styles.input}
               value={invoiceData.invoiceNumber}
               onChangeText={(value) => handleOnChange('invoiceNumber', value)}
-              placeholder="Enter Invoice Number"
+              placeholder="Invoice No."
             />
           </View>
           <View style={styles.invoiceInfo}>
@@ -242,7 +239,7 @@ export default Invoice1 = () => {
               style={styles.input}
               value={invoiceData.invoiceDate}
               onChangeText={(value) => handleOnChange('invoiceDate', value)}
-              placeholder="Enter Invoice Date"
+              placeholder="Invoice Date"
             />
           </View>
         </View>
@@ -305,6 +302,9 @@ export default Invoice1 = () => {
                 keyboardType="numeric"
                 onBlur={calculateTotal} // Recalculate total on price change
               />
+              <Text style={styles.itemTotal}>
+                Total: ${(item.quantity && item.price) ? (item.quantity * item.price).toFixed(2) : '0.00'}
+              </Text>
             </View>
           ))}
         </View>
@@ -314,25 +314,32 @@ export default Invoice1 = () => {
           <Text style={styles.total}>${invoiceData.total}</Text>
         </View>
       </ScrollView>
-    )}</SafeAreaView>
+
+
+    }
+  </View>
 };
 
 const styles = StyleSheet.create({
-  main: {
+  input:{
+    height: 20,
+    marginLeft:5
+  },
+  itemDetailsInput:{
+    height: 20,
+
+  },
+  maincontainer: {
+    flexGrow: 1,
     height: "100%",
-    width: "100%",
-    flex: 1,
-    flexDirection: 'row',
+    backgroundColor: '#fff',
   },
   buttonContainer: {
-     flexDirection: "row" , justifyContent: 'space-evenly' 
+    flexDirection: "row", justifyContent: 'space-evenly'
   },
   container: {
     padding: 20,
-    height: "100%",
-  },
-  topButtons: {
-    width: "25%",
+    marginTop: 80,
   },
   header: {
     alignItems: 'center',
@@ -347,19 +354,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   invoiceInfo: {
-    flex: 1,
-    marginRight: 10,
+    flexDirection: 'row',
   },
   label: {
     fontWeight: 'bold',
-    marginBottom: 5,
+    textAlign:"center"
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
+  text: {
+    marginLeft: 5,
   },
   divider: {
     borderBottomColor: '#ccc',
@@ -370,7 +372,8 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   customerInfo: {
-    marginBottom: 10,
+    flexDirection: 'row',
+    marginVertical: 5,
   },
   subtitle: {
     fontSize: 18,
@@ -381,29 +384,20 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   item: {
-    marginBottom: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 5,
   },
-  itemNameInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
+  itemName: {
+    fontSize: 16,
   },
-  itemDetailsInput: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    borderRadius: 5,
-    marginBottom: 10,
-  },
+  itemDetails: {},
   itemTotal: {
-    marginTop: 10,
     fontWeight: 'bold',
   },
   totalContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     marginTop: 20,
   },
   total: {
@@ -411,3 +405,4 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+

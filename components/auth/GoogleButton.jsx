@@ -20,13 +20,10 @@ const GoogleButton = () => {
 const styles = StyleSheet.create({
   googleButton: {
     flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
     backgroundColor: "#DB4437",
     paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingHorizontal: 100,
     borderRadius: 25,
-    width: 250
   },
   icon: {
     marginRight: 10,

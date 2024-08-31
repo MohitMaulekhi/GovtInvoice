@@ -4,11 +4,9 @@ import { Button } from "react-native-paper";
 
 const AuthButton = ({ type, func }) => {
   return (
-    <TouchableOpacity style={styles.authButton}>
       <Button style={styles.authButton} mode="contained" onPress={func}>
         {type}
       </Button>
-    </TouchableOpacity>
   );
 };
 
