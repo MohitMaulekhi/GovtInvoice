@@ -1,4 +1,4 @@
-import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { ActivityIndicator, Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import visionImage from "../assets/VisionImage2.png"
 import userIcon from "../assets/profile.png"
 import { Button, TextInput } from 'react-native-paper'
@@ -9,12 +9,28 @@ import { router } from 'expo-router'
 import { Auth} from '../services/firebaseconfig.js'
 import GoogleButton from "../components/auth/GoogleButton.jsx"
 import AppleButton from "../components/auth/AppleButton.jsx"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 const index = () => {
   const [Email, setEmail] = useState("")
   const [Password, setPassword] = useState("")
   const [alreadyUser, setAlreadyUser] = useState(0)
-    Auth.onAuthStateChanged((user) => {
-      if(user){
+  const [loading,setLoading] = useState(0)
+  useEffect(()=>{
+    async function fetchUserData() {
+      setLoading(1)
+      const email = await AsyncStorage.getItem("email")
+      const password = await AsyncStorage.getItem("password")
+      if(email && password){
+        LogIn(email, password,setLoading)
+        router.replace("/main/home")
+      }
+      setLoading(0)
+    }
+    fetchUserData()
+    
+  },[])
+    Auth.onAuthStateChanged(async(user) => {
+      if(user != null){
       router.replace("/main/home")
      }
     }
@@ -22,7 +38,11 @@ const index = () => {
       
 
 
-  return (
+  return loading?(
+    <View style={[styles.container, styles.horizontal]}>
+    <ActivityIndicator size="large" color="#0000ff"  />
+  </View>):(
+
     <View style={styles.authenticationPage}>
       <Image
         style={styles.visionImage2Icon}
@@ -55,9 +75,9 @@ const index = () => {
           secureTextEntry={true}
         />
         {alreadyUser ? (
-          <AuthButton type={"Sign Up"} func={() => SignUp(Email, Password)} />
+          <AuthButton type={"Sign Up"} func={() => {setLoading(1);SignUp(Email, Password,setLoading)}} />
         ) : (
-          <AuthButton type={"Log In"} func={() => LogIn(Email, Password)} />
+          <AuthButton type={"Log In"} func={()=> {setLoading(1);LogIn(Email, Password,setLoading)}} />
         )}
         {alreadyUser ? (
           <View style = {styles.authText}>
@@ -87,6 +107,15 @@ const index = () => {
 export default index;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+  },
+  horizontal: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    padding: 10,
+  },
   Text: {
     fontSize: 20,
     color: "#000",
