@@ -43,6 +43,7 @@ const home = () => {
     <View styles = {styles.container}>
       {typeParser()}
        <FloatingAction
+       styles={styles.fab}
         actions={actions}
         onPressItem={type => {
          setType(type);
