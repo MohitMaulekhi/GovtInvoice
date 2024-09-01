@@ -122,12 +122,12 @@ export default Invoice1 = () => {
         <div class="item">
             <div class="item-name">${invoiceData?.items[0].name}</div>
             <div>${invoiceData?.items[0].quantity} x $${invoiceData?.items[0].price}</div>
-            <div class="item-total">$${invoiceData?.items[0].total}</div>
+            <div class="item-total">$${(invoiceData?.items[0].quantity && invoiceData?.items[0].price) ? (invoiceData?.items[0].quantity * invoiceData?.items[0].price).toFixed(2) : '0.00'}</div>
         </div>
         <div class="item">
             <div class="item-name">${invoiceData?.items[1].name}</div>
             <div>${invoiceData?.items[1].quantity} x $${invoiceData?.items[1].price}</div>
-            <div class="item-total">$${invoiceData?.items[1].total}</div>
+            <div class="item-total">$${(invoiceData?.items[1].quantity && invoiceData?.items[1].price) ? (invoiceData?.items[1].quantity * invoiceData?.items[1].price).toFixed(2) : '0.00'}</div>
         </div>
         <div class="divider"></div>
         <div class="total-container">
@@ -208,7 +208,7 @@ export default Invoice1 = () => {
             <Text style={styles.itemDetails}>
               {item.quantity} x ${item.price}
             </Text>
-            <Text style={styles.itemTotal}>${item.total}</Text>
+            <Text style={styles.itemTotal}>${(item.quantity && item.price) ? (item.quantity * item.price).toFixed(2) : '0.00'}</Text>
           </View>
         ))}
       </View>

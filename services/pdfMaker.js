@@ -1,6 +1,5 @@
 import * as Print from 'expo-print';
 import { shareAsync } from 'expo-sharing';
-import { getStorage, ref, uploadBytes, uploadBytesResumable } from 'firebase/storage';
 
 export const print = async (html) => {
   await Print.printAsync({
