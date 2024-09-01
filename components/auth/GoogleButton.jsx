@@ -22,8 +22,9 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     backgroundColor: "#DB4437",
     paddingVertical: 10,
-    paddingHorizontal: 100,
+    paddingHorizontal: 60,
     borderRadius: 25,
+    width: 300
   },
   icon: {
     marginRight: 10,

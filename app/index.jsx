@@ -58,7 +58,7 @@ const index = () => {
             source={userIcon}
           />
         </View>
-        <Text style={styles.letsConnectWith}>Let's Connect With Us!</Text>
+        <Text style={styles.letsConnectWith}>Start Invoicing with Us!</Text>
         <TextInput
           style={styles.input}
           mode="outlined"
@@ -74,22 +74,22 @@ const index = () => {
           onChangeText={(text) => setPassword(text)}
           secureTextEntry={true}
         />
-        {alreadyUser ? (
+        {!alreadyUser ? (
           <AuthButton type={"Sign Up"} func={() => {setLoading(1);SignUp(Email, Password,setLoading)}} />
         ) : (
           <AuthButton type={"Log In"} func={()=> {setLoading(1);LogIn(Email, Password,setLoading)}} />
         )}
-        {alreadyUser ? (
+        {!alreadyUser ? (
           <View style = {styles.authText}>
-            <Text>Don't have an account</Text>
-            <Button onPress={(temp) => setAlreadyUser(0)}>
+            <Text>Already have an account</Text>
+            <Button onPress={(temp) => setAlreadyUser(1)}>
               <Text>Log in</Text>
             </Button>
           </View>
         ) : (
           <View style = {styles.authText}>
-            <Text>Already have an account</Text>
-            <Button onPress={() => setAlreadyUser(1)}>
+            <Text>Don't have an account</Text>
+            <Button onPress={() => setAlreadyUser(0)}>
               Sign Up
             </Button>
             
@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
     color: "#000",
   },
   authText:{
-    margin:10
+    margin:5
   },
   authenticationPage: {
     borderRadius: 32,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   visionImage2Icon: {
     width: "100%",
     height: "35%",
-
+    objectFit: "fit",
   },
   containerMain: {
     flex: 1,
@@ -145,27 +145,37 @@ const styles = StyleSheet.create({
   },
   ellipse: {
     backgroundColor: "#D9D9D9",
-    width: 100,
-    height: 100,
+    width: 80,
+    height: 80,
     borderRadius: 100,
     alignItems: "center",
     position: "relative",
     bottom: 50,
     marginBottom: -50,
+    opacity: 0.85,
+    shadowColor: "#000", 
+    shadowOffset: { width: 0, height: 2, }, 
+    shadowOpacity: 0.25, 
+    shadowRadius: 4, 
+    elevation: 5
   },
   userIcon: {
-    height: 100,
-    width: 100,
+    height: 50,
+    width: 50,
+    position: "relative",
+    top: 15,
+
   },
   letsConnectWith: {
-    fontSize: 32,
+    fontSize: 28,
     letterSpacing: 1,
     lineHeight: 48,
     textAlign: "left",
     color: "#000",
     fontWeight: "bold",
+    // padding: 10,
   },
   input: {
-    width: "100%",
+    width: '90%',
   },
 });

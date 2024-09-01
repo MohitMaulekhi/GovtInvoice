@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
   },
   container: {
     padding: 20,
-    marginTop: 80,
+    marginTop: 35,
   },
   header: {
     alignItems: 'center',
@@ -398,11 +398,17 @@ const styles = StyleSheet.create({
   totalContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
-    marginTop: 20,
+    display: "flex",
+    justifyContent: "between",
   },
   total: {
     fontSize: 18,
     fontWeight: 'bold',
   },
+  topButtons: {
+    marginTop: 10
+  },
+  // divider:{
+  //   padding: 10
+  // }
 });
-

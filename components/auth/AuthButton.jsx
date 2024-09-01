@@ -14,11 +14,11 @@ export default AuthButton;
 
 const styles = StyleSheet.create({
   authButton: {
-    width: "100%",
+    width: "80%",
     backgroundColor: "#0098FF",
     borderRadius: 100,
     display: "flex",
     justifyContent: "center",
-    marginTop: 10
+    marginTop: 10,
   },
 });
